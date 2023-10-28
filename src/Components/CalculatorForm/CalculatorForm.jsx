@@ -1,7 +1,7 @@
 'use client';
 import { apiUrls } from "@/assets/api/apiUrls";
 import { useFormik } from "formik";
-import TextInput from "../NumberInput/TextInput";
+import TextInput from "../TextInput/TextInput";
 import "./calculatorForm.css";
 import Button from "../Button/Button";
 import { useState, useRef } from "react";

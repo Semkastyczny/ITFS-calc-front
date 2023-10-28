@@ -36,6 +36,7 @@ input, label {
   
 input {
     color: #000000;
+    text-align: center;
 }
 
 .active {
