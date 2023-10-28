@@ -3,8 +3,8 @@ function Button(props) {
     return (
         <button
             className = {props.styles}
-            // onClick={}
-            type = {props.type}
+            onClick={props?.onClick}
+            type = {props?.type}
         >
             <img src={props.img} alt="plus-math"/>
         </button>

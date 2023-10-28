@@ -4,11 +4,13 @@ import { useFormik } from "formik";
 import TextInput from "../NumberInput/TextInput";
 import "./calculatorForm.css";
 import Button from "../Button/Button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 function CalculatorForm(props) {
 
     const operationMethods = ["sum", "subtraction", "multiplication", "division"];
+    
+    const messageRef = useRef();
 
     const [value, setValue] = useState(0);
 
@@ -32,16 +34,26 @@ function CalculatorForm(props) {
             errors.operation = "Nie wybrano żadnej operacji matematycznej"
         }
 
+        if (Object.keys(errors).length > 0 ) {
+            messageRef.current.innerText = errors[Object.keys(errors)[0]];
+            messageRef.current.classList.add("show")
+        } else {
+            messageRef.current.innerText = null;
+            messageRef.current.classList.remove("show")
+        }
+
+        return errors;
+
     } 
     const calculatorForm = useFormik({
         initialValues: {
             'firstNumber' : "",
             'secondNumber' : "",
-            'operation' : "sum"
+            'operation' : ""
         },
+        validateOnChange: false,
         validate: validateForm,
         onSubmit: (values, actions) => {
-            //TODO finish form submitting
             const formData = new FormData();
 
             formData.append("firstNumber", values.firstNumber)
@@ -54,7 +66,7 @@ function CalculatorForm(props) {
                 })
                 .then((res) => res.json())
                 .then((json) => {
-                    console.log(json);
+                    if (!json.error) setValue(json.result)
                 })
             }, 200)
         }
@@ -91,24 +103,33 @@ function CalculatorForm(props) {
                 </div>
                 <div className={"operationList"}>
                     <Button
-                        styles = {"operationButton"}
+                        styles = {"operationButton" + (calculatorForm.values["operation"] === "sum" ? " active" : "")}
+                        type = "button"
                         img = "https://img.icons8.com/ios-filled/50/plus-math.png"
+                        onClick ={() => calculatorForm.setFieldValue("operation", "sum")}
                     />
                     <Button
-                        styles = {"operationButton"}
+                        styles = {"operationButton" + (calculatorForm.values["operation"] === "subtraction" ? " active" : "")}
+                        type = "button"
                         img = "https://img.icons8.com/ios-filled/50/minus-math.png"
+                        onClick ={() => calculatorForm.setFieldValue("operation", "subtraction")}
                     />
                     <Button
-                        styles = {"operationButton"}
+                        styles = {"operationButton" + (calculatorForm.values["operation"] === "multiplication" ? " active" : "")}
+                        type = "button"
                         img = "https://img.icons8.com/ios-filled/50/multiply.png"
+                        onClick ={() => calculatorForm.setFieldValue("operation", "multiplication")}
                     />
                     <Button
-                        styles = {"operationButton"}
+                        styles = {"operationButton" + (calculatorForm.values["operation"] === "division" ? " active" : "")}
+                        type = "button"
                         img = "https://img.icons8.com/ios-filled/50/divide.png"
+                        onClick ={() => calculatorForm.setFieldValue("operation", "division")}
                     />
                 </div>
-
             </form>
+            <p className={"errorMessage"} ref={messageRef}></p>
+
         </div>
     )
 }
