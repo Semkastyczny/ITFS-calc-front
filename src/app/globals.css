@@ -25,3 +25,10 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.wrapper {
+  margin:auto;
+  /* max-width:50%; */
+  background-color: #000000;
+  border-radius: 15px;
+}
